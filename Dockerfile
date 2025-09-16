@@ -1,0 +1,59 @@
+# Use official nodejs image as the base image
+FROM node:22-alpine
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy package.json & package-lock.json file for dependency installation
+COPY package*.json ./
+
+# Install the app dependencies
+RUN npm install
+
+# Copy the rest of your application code
+COPY . .
+
+# Install Prisma globally and generate Prisma client
+RUN npm install -g prisma
+RUN npx prisma generate
+
+# Define build arguments for the environment variables (without values)
+ARG DATABASE_URL
+ARG DIRECT_URL
+ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+ARG CLERK_SECRET_KEY
+ARG NEXT_PUBLIC_CLERK_SIGN_IN_URL
+ARG NEXT_PUBLIC_CLERK_SIGN_UP_URL
+ARG NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL
+ARG NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL
+ARG OPENAI_API_KEY
+ARG GEMINI_API_KEY
+ARG NEXT_PUBLIC_PUBLISHABLE_KEY
+ARG STRIPE_SECRET_KEY
+ARG WEBHOOK_ENDPOINT_SECRET
+ARG NEXT_PUBLIC_BASE_URL
+
+# Set environment variables during the build and runtime (with placeholders)
+ENV DATABASE_URL=${DATABASE_URL}
+ENV DIRECT_URL=${DIRECT_URL}
+ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+ENV CLERK_SECRET_KEY=${CLERK_SECRET_KEY}
+ENV NEXT_PUBLIC_CLERK_SIGN_IN_URL=${NEXT_PUBLIC_CLERK_SIGN_IN_URL}
+ENV NEXT_PUBLIC_CLERK_SIGN_UP_URL=${NEXT_PUBLIC_CLERK_SIGN_UP_URL}
+ENV NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=${NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL}
+ENV NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=${NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL}
+ENV OPENAI_API_KEY=${OPENAI_API_KEY}
+ENV GEMINI_API_KEY=${GEMINI_API_KEY}
+ENV NEXT_PUBLIC_PUBLISHABLE_KEY=${NEXT_PUBLIC_PUBLISHABLE_KEY}
+ENV STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+ENV WEBHOOK_ENDPOINT_SECRET=${WEBHOOK_ENDPOINT_SECRET}
+ENV NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
+
+# Build the nextjs app for production
+RUN npm run build
+
+# Expose port 3000 for the application
+EXPOSE 3000
+
+# Start the application
+CMD ["npm", "start"]
