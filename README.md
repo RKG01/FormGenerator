@@ -344,8 +344,8 @@ This project uses the following open-source technologies:
 ## Author
 
 - **Rahul Gupta**
-  - GitHub: [nishkarsh25](https://github.com/nishkash25)
-  - Email: bm21btech11016@gmail.com
+  - GitHub: [RKG01](https://github.com/RKG01)
+  - Email: rahulg23102@iiitnr.edu.in
 
 
 
