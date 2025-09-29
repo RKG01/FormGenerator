@@ -4,7 +4,7 @@ Welcome to the NEXTJS project! This comprehensive guide will walk you through ev
 
 ## Introduction
 
-The **SAAS-NEXTJS15-TYPESCRIPT-PRISMA-DOCKER-CLERK-OPENAPI-GEMINI-AiFormGenerator** is a modern web application designed to help users easily create, manage, and interact with forms. Built with **Next.js 15** and **TypeScript**, this platform integrates powerful tools and services such as **Prisma** for database management, **Clerk** for user authentication, and **OpenAI** and **Gemini** for AI-driven form generation.
+The SAAS-NEXTJS15-TYPESCRIPT-PRISMA-DOCKER-CLERK-OPENAPI-GEMINI-AiFormGenerator is a cutting-edge web application that enables users to effortlessly create, manage, and interact with forms. Developed using Next.js 15 and TypeScript, it leverages advanced tools and services such as Prisma for database management, Clerk for authentication, and OpenAI along with Gemini for AI-powered form generation.
 
 This application streamlines the process of creating dynamic forms by leveraging artificial intelligence to assist in generating form content. It is highly scalable, easily deployable with **Docker**, and provides real-time analytics for user activity. Users can manage their subscriptions and track form submissions through a user-friendly dashboard.
 
