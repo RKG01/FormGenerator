@@ -39,11 +39,11 @@ const HeroSection :React.FC<Props> = ({totalForms, isSubscribed}) => {
 
         <div className="container mx-auto text-center relative">
           <h1 className="text-4xl font-bold">
-            Build AI-Driven Forms Effortlessly
+            Build AI-Driven Forms Effortlessly with Gemini AI
           </h1>
           <p className="mt-4 text-lg ">
             Leverage the power of AI to create responsive and dynamic froms in
-            minutes
+            minutes 
           </p>
         </div>
       </div>
