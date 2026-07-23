@@ -1,4 +1,5 @@
 import { getForms } from "@/actions/getForms";
+import { getUserSubscription } from "@/actions/userSubscription";
 import FormList from "@/components/FormList";
 import GenerateFormInput from "@/components/GenerateFormInput";
 import { Button } from "@/components/ui/button";
@@ -11,11 +12,15 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Form } from "@/types/form";
+import { currentUser } from "@clerk/nextjs/server";
 import { Plus } from "lucide-react";
 import React from "react";
 
 const MyForm = async () => {
+  const user = await currentUser();
   const forms = await getForms();
+  const isSubscribed = user ? await getUserSubscription(user.id) : false;
+  const totalForms = forms?.data?.length || 0;
 
   return (
     <div>
@@ -35,7 +40,7 @@ const MyForm = async () => {
                 Write a clean prompt to get better results.
               </DialogDescription>
             </DialogHeader>
-            <GenerateFormInput />
+            <GenerateFormInput totalForms={totalForms} isSubscribed={isSubscribed} />
           </DialogContent>
         </Dialog>
       </section>

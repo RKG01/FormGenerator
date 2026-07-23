@@ -5,4 +5,4 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export const MAX_FREE_FORM : number = 30;
+export const MAX_FREE_FORM : number = 3;

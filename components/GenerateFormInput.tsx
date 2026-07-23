@@ -25,7 +25,7 @@ type Props = {
   isSubscribed?:boolean;
 }
 
-const GenerateFormInput: React.FC<Props> = ({ text, totalForms, isSubscribed }) => {
+const GenerateFormInput: React.FC<Props> = ({ text, totalForms = 0, isSubscribed = false }) => {
   const [description, setDescription] = useState<string | undefined>("");
   const [state, formAction] = useActionState(generateForm, initialState);
   const router = useRouter();
@@ -47,7 +47,7 @@ const GenerateFormInput: React.FC<Props> = ({ text, totalForms, isSubscribed }) 
     }
   }, [router, state]);
 
-  isSubscribed=true //Generally it must be received through stripe webhook but for now lets go with it assigning static value
+  const canGenerate = isSubscribed || totalForms < MAX_FREE_FORM;
  
   return (
     <form action={formAction} className="flex items-center gap-4 my-8">
@@ -61,7 +61,7 @@ const GenerateFormInput: React.FC<Props> = ({ text, totalForms, isSubscribed }) 
         required
       />
       {
-         isSubscribed && totalForms! <= MAX_FREE_FORM ? <SubmitButton /> : <Button disabled className="h-12"> <Lock/> Upgrade Plan</Button>
+         canGenerate ? <SubmitButton /> : <Button disabled className="h-12"> <Lock/> Upgrade Plan</Button>
       }
       
     </form>

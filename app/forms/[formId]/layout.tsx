@@ -1,13 +1,10 @@
-import DashboardSidebar from "@/components/Sidebar"; 
-import { SidebarProvider } from "@/components/ui/sidebar";
 import React from "react";
 
 const layout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <SidebarProvider>
-      <DashboardSidebar />
-      <main className="mx-6 my-4 w-full">{children}</main>
-    </SidebarProvider>
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background">
+      <main className="max-w-2xl w-full">{children}</main>
+    </div>
   );
 };
 
