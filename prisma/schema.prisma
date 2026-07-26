@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Form {
@@ -15,6 +16,7 @@ model Form {
   content         Json
   submissions     Int           @default(0)
   shareUrl        String        @default(uuid())
+  aiSummary       String?
   FormSubmissions Submissions[]
 }
 
@@ -23,6 +25,7 @@ model Submissions {
   createdAt DateTime @default(now())
   formId    Int
   content   Json
+  tags      String[] @default([])
   form      Form     @relation(fields: [formId], references: [id])
 }
 

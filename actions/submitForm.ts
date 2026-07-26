@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
+import { tagSubmission } from "@/actions/tagSubmission";
 
 export const submitForm = async (formId: number, formData: any) => {
   try {
@@ -25,12 +26,17 @@ export const submitForm = async (formId: number, formData: any) => {
       return { success: false, message: "form not found" };
     }
 
-    await prisma.submissions.create({
+    const submission = await prisma.submissions.create({
       data: {
         formId,
         content: formData,
       },
     });
+
+    // Tag the submission in the background without blocking the form response
+    tagSubmission(submission.id).catch((err) =>
+      console.error("Background tagging error:", err)
+    );
 
     await prisma.form.update({
       where: {
