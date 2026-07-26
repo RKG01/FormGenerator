@@ -52,5 +52,6 @@ export const submitForm = async (formId: number, formData: any) => {
     return { success: true, message: "Form submitted successfully" };
   } catch (error) {
     console.log(error);
+    return { success: false, message: "An unexpected error occurred" };
   }
 };

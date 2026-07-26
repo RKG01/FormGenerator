@@ -6,7 +6,7 @@ import { currentUser } from "@clerk/nextjs/server";
 export const publishForm = async (formId: number) => {
   try {
     const user = await currentUser();
-    
+
 
     if (!user) {
       return { success: false, message: "User not found" };

@@ -64,7 +64,7 @@ const AiGeneratedForm: React.FC<Props> = ({ form, isEditMode }) => {
     }
 
     if (!data?.success) {
-      toast.error(data?.message);
+      toast.error(data?.message || "An error occurred");
     }
   };
 
