@@ -6,8 +6,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { updateFormIntegrations } from "@/actions/updateFormIntegrations";
+import { testWebhook } from "@/actions/testWebhook";
 import toast from "react-hot-toast";
-import { Globe, Sheet, Database, Copy, Check, Loader2 } from "lucide-react";
+import { Globe, Sheet, Database, Copy, Check, Loader2, Send } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 type Props = {
@@ -52,6 +53,27 @@ const IntegrationsForm: React.FC<Props> = ({ formId, initialSettings }) => {
   const [notionDatabaseId, setNotionDatabaseId] = useState(initialSettings.notionDatabaseId);
   const [copied, setCopied] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const [isTestingWebhook, setIsTestingWebhook] = useState(false);
+
+  const handleTestWebhook = async () => {
+    if (!webhookUrl) {
+      toast.error("Please enter a Webhook URL first.");
+      return;
+    }
+    setIsTestingWebhook(true);
+    try {
+      const res = await testWebhook(webhookUrl);
+      if (res.success) {
+        toast.success(res.message);
+      } else {
+        toast.error(res.message);
+      }
+    } catch (error) {
+      toast.error("Failed to connect to the webhook endpoint.");
+    } finally {
+      setIsTestingWebhook(false);
+    }
+  };
 
   const handleCopy = () => {
     navigator.clipboard.writeText(appsScriptCode);
@@ -148,14 +170,32 @@ const IntegrationsForm: React.FC<Props> = ({ formId, initialSettings }) => {
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="webhookUrl">Webhook Endpoint URL</Label>
-                    <Input
-                      id="webhookUrl"
-                      type="url"
-                      placeholder="https://your-webhook-endpoint.com/receive"
-                      value={webhookUrl}
-                      onChange={(e) => setWebhookUrl(e.target.value)}
-                      className="rounded-xl border-border/60 bg-background/50 focus:border-violet-500/50"
-                    />
+                    <div className="flex gap-2">
+                      <Input
+                        id="webhookUrl"
+                        type="url"
+                        placeholder="https://your-webhook-endpoint.com/receive"
+                        value={webhookUrl}
+                        onChange={(e) => setWebhookUrl(e.target.value)}
+                        className="rounded-xl border-border/60 bg-background/50 focus:border-violet-500/50 flex-1"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={handleTestWebhook}
+                        disabled={isTestingWebhook || !webhookUrl}
+                        className="rounded-xl border-violet-500/20 text-violet-500 hover:bg-violet-500/10 hover:text-violet-600 font-medium flex items-center gap-1.5 min-w-[80px]"
+                      >
+                        {isTestingWebhook ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <>
+                            <Send className="w-3.5 h-3.5" />
+                            Test
+                          </>
+                        )}
+                      </Button>
+                    </div>
                   </div>
 
                   <div className="bg-secondary/30 rounded-xl p-4 border border-border/40 text-xs text-muted-foreground space-y-2">
