@@ -8,9 +8,12 @@ export const updateFormIntegrations = async (
   formId: number,
   data: {
     webhookUrl: string | null;
+    webhookEnabled: boolean;
     notionApiKey: string | null;
     notionDatabaseId: string | null;
+    notionEnabled: boolean;
     googleSheetUrl: string | null;
+    googleSheetEnabled: boolean;
   }
 ) => {
   try {
@@ -67,15 +70,33 @@ export const updateFormIntegrations = async (
       return trimmed === "" ? null : trimmed;
     };
 
+    // Calculate initial connection statuses based on enabled state and credential presence
+    const getStatus = (enabled: boolean, hasCredentials: boolean) => {
+      if (!enabled) return "DISCONNECTED";
+      return hasCredentials ? "CONNECTED" : "DISCONNECTED";
+    };
+
+    const webhookHasCreds = !!formattedWebhookUrl;
+    const notionHasCreds = !!trimField(data.notionApiKey) && !!trimField(data.notionDatabaseId);
+    const googleSheetHasCreds = !!formattedGoogleSheetUrl;
+
     await prisma.form.update({
       where: {
         id: formId,
       },
       data: {
         webhookUrl: formattedWebhookUrl,
+        webhookEnabled: data.webhookEnabled && webhookHasCreds,
+        webhookStatus: getStatus(data.webhookEnabled, webhookHasCreds),
+
         notionApiKey: trimField(data.notionApiKey),
         notionDatabaseId: trimField(data.notionDatabaseId),
+        notionEnabled: data.notionEnabled && notionHasCreds,
+        notionStatus: getStatus(data.notionEnabled, notionHasCreds),
+
         googleSheetUrl: formattedGoogleSheetUrl,
+        googleSheetEnabled: data.googleSheetEnabled && googleSheetHasCreds,
+        googleSheetStatus: getStatus(data.googleSheetEnabled, googleSheetHasCreds),
       },
     });
 

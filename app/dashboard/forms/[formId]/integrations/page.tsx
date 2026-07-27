@@ -52,13 +52,46 @@ const IntegrationsPage = async ({ params }: Props) => {
   const formContent = form.content as any;
   const formTitle = formContent?.title || "Untitled Form";
 
-  // Package initial settings to send to client component
+  // Package initial settings and status info to send to client component
   const initialSettings = {
     webhookUrl: form.webhookUrl || "",
+    webhookEnabled: form.webhookEnabled,
+    webhookStatus: form.webhookStatus,
+    webhookLastSync: form.webhookLastSync ? form.webhookLastSync.toISOString() : null,
+    webhookLastSuccess: form.webhookLastSuccess ? form.webhookLastSuccess.toISOString() : null,
+
     notionApiKey: form.notionApiKey || "",
     notionDatabaseId: form.notionDatabaseId || "",
+    notionEnabled: form.notionEnabled,
+    notionStatus: form.notionStatus,
+    notionLastSync: form.notionLastSync ? form.notionLastSync.toISOString() : null,
+    notionLastSuccess: form.notionLastSuccess ? form.notionLastSuccess.toISOString() : null,
+
     googleSheetUrl: form.googleSheetUrl || "",
+    googleSheetEnabled: form.googleSheetEnabled,
+    googleSheetStatus: form.googleSheetStatus,
+    googleSheetLastSync: form.googleSheetLastSync ? form.googleSheetLastSync.toISOString() : null,
+    googleSheetLastSuccess: form.googleSheetLastSuccess ? form.googleSheetLastSuccess.toISOString() : null,
   };
+
+  const logs = await prisma.integrationLog.findMany({
+    where: {
+      formId: Number(formId),
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: 20,
+  });
+
+  const formattedLogs = logs.map((log) => ({
+    id: log.id,
+    createdAt: log.createdAt.toISOString(),
+    submissionId: log.submissionId,
+    integrationType: log.integrationType,
+    status: log.status,
+    message: log.message,
+  }));
 
   return (
     <main className="max-w-4xl mx-auto py-6 space-y-6">
@@ -71,7 +104,11 @@ const IntegrationsPage = async ({ params }: Props) => {
         </p>
       </div>
 
-      <IntegrationsForm formId={form.id} initialSettings={initialSettings} />
+      <IntegrationsForm 
+        formId={form.id} 
+        initialSettings={initialSettings} 
+        logs={formattedLogs} 
+      />
     </main>
   );
 };

@@ -17,11 +17,40 @@ model Form {
   submissions     Int           @default(0)
   shareUrl        String        @default(uuid())
   aiSummary       String?
-  webhookUrl      String?
-  notionApiKey    String?
-  notionDatabaseId String?
-  googleSheetUrl  String?
+  
+  // Integration fields
+  webhookUrl             String?
+  webhookEnabled         Boolean        @default(false)
+  webhookStatus          String         @default("DISCONNECTED")
+  webhookLastSync        DateTime?
+  webhookLastSuccess     DateTime?
+
+  notionApiKey           String?
+  notionDatabaseId       String?
+  notionEnabled          Boolean        @default(false)
+  notionStatus           String         @default("DISCONNECTED")
+  notionLastSync         DateTime?
+  notionLastSuccess      DateTime?
+
+  googleSheetUrl         String?
+  googleSheetEnabled     Boolean        @default(false)
+  googleSheetStatus      String         @default("DISCONNECTED")
+  googleSheetLastSync    DateTime?
+  googleSheetLastSuccess DateTime?
+
   FormSubmissions Submissions[]
+  integrationLogs IntegrationLog[]
+}
+
+model IntegrationLog {
+  id              Int      @id @default(autoincrement())
+  createdAt       DateTime @default(now())
+  formId          Int
+  submissionId    Int
+  integrationType String   // "WEBHOOK", "GOOGLE_SHEET", "NOTION"
+  status          String   // "SUCCESS", "FAILED"
+  message         String?
+  form            Form     @relation(fields: [formId], references: [id], onDelete: Cascade)
 }
 
 model Submissions {
