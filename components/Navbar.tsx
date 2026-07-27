@@ -8,7 +8,7 @@ import { ModeToggle } from "@/components/DarkMode";
 import Logo from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { LayoutDashboard, Home, BarChart2 } from "lucide-react";
+import { LayoutDashboard, Home, BarChart2, Zap } from "lucide-react";
 
 export const Navbar = () => {
   const pathname = usePathname();
@@ -31,6 +31,12 @@ export const Navbar = () => {
       href: "/dashboard/analytics",
       icon: <BarChart2 className="w-4 h-4" />,
       active: pathname.startsWith("/dashboard/analytics"),
+    },
+    {
+      name: "Upgrade Plan",
+      href: "/dashboard/upgrade",
+      icon: <Zap className="w-4 h-4 text-violet-400 fill-violet-400/20" />,
+      active: pathname.startsWith("/dashboard/upgrade"),
     },
   ];
 

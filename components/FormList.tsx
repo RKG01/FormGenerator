@@ -41,11 +41,16 @@ const FormList: React.FC<Props> = ({ form }) => {
             Deploy your new project in one-click.
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="flex flex-col items-start gap-1">
           <Link href={`/dashboard/forms/${form.id}/submissions`}>
-            <Button variant={"link"} className="text-blue-600">
-              Submission - {form.submissions}
-            </Button>{" "}
+            <Button variant={"link"} className="text-blue-600 h-auto p-0 hover:underline">
+              Submissions - {form.submissions}
+            </Button>
+          </Link>
+          <Link href={`/dashboard/forms/${form.id}/integrations`}>
+            <Button variant={"link"} className="text-violet-600 h-auto p-0 hover:underline">
+              Integrations & Automations
+            </Button>
           </Link>
         </CardContent>
         <CardFooter className="flex justify-between">

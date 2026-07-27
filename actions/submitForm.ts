@@ -3,6 +3,7 @@
 import prisma from "@/lib/prisma";
 import { currentUser } from "@clerk/nextjs/server";
 import { tagSubmission } from "@/actions/tagSubmission";
+import { triggerIntegrations } from "@/actions/triggerIntegrations";
 
 export const submitForm = async (formId: number, formData: any) => {
   try {
@@ -33,9 +34,12 @@ export const submitForm = async (formId: number, formData: any) => {
       },
     });
 
-    // Tag the submission in the background without blocking the form response
+    // Tag and trigger integrations in the background without blocking responses
     tagSubmission(submission.id).catch((err) =>
       console.error("Background tagging error:", err)
+    );
+    triggerIntegrations(formId, submission.id, formData).catch((err) =>
+      console.error("Background integrations error:", err)
     );
 
     await prisma.form.update({

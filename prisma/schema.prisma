@@ -17,6 +17,10 @@ model Form {
   submissions     Int           @default(0)
   shareUrl        String        @default(uuid())
   aiSummary       String?
+  webhookUrl      String?
+  notionApiKey    String?
+  notionDatabaseId String?
+  googleSheetUrl  String?
   FormSubmissions Submissions[]
 }
 

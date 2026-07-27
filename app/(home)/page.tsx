@@ -13,11 +13,11 @@ const HomePage = async () => {
     redirect("/sign-in");
   }
 
-  const forms = await getForms();
+  const [forms, isSubscribed] = await Promise.all([
+    getForms(user.id),
+    getUserSubscription(user.id) as Promise<boolean>,
+  ]);
   const totalNumberOfFormCreated = forms?.data?.length || (0 as number);
-  const isSubscribed = (await getUserSubscription(
-    user?.id as string
-  )) as boolean;
 
   return (
     <div className="grid items-center justify-items-center min-h-screen p-8 gap-16 sm:p-20">
